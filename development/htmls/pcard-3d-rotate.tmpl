@@ -1,0 +1,41 @@
+<!-- Шаблон КТ для сборки -->
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+
+	<!-- подключение мета тегов -->
+	@@include('scaff/layout__meta-tags.html')
+	
+	<!-- подключение стилей -->
+	@@include('scaff/layout__css-list.html')
+
+	<title>Product card + 3d</title>
+
+
+	<!-- здесь подключай свои стили -->
+	<!-- НАПРИМЕР: <link rel="stylesheet" href="css/catalog.min.css"> -->
+</head>
+<body>
+	<div class="page">
+		
+		<!-- Подключене блока шапки -->
+		
+		<header class="page__header">
+			@@include('scaff/layout__header.html')
+		</header>
+
+
+		<main class="page__content">
+			@@include('scaff/pages__pcard.html')
+		</main>
+
+
+		<footer class="page__footer">
+			@@include('scaff/layout__footer.html')
+		</footer>
+	</div>
+
+	@@include('scaff/layout__js-list.html')
+</body>
+</html>
