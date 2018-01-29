@@ -1,0 +1,51 @@
+﻿// 3d rotate image
+
+.scale-3d {
+	transform: scale(.6);
+}
+
+.pcard-3d-rotate {
+
+	position: 		relative;
+
+	@sq: 			640px;
+
+	width: 			@sq;
+	height: 		@sq;
+	
+	margin: 		100px auto;
+
+	border: 		3px solid #E5EAF3;
+
+	//box-shadow: 	0 5px 20px rgba(0,0,0,0.2);
+	overflow: 		hidden;
+
+	img {
+		position: 	absolute;
+		left: 		0;
+		top: 		0;
+
+		@speed:     0.8s;
+		// что бы ускорить либо притормозить скорость вращения, меняем скорость moveHor (например .9s), а в moveVert умножаем скорость moveHor на 9 (8.2s)
+		animation: moveHor @speed steps(1) infinite, moveVert (@speed * 9) steps(9) infinite;
+    	
+	}
+
+	@keyframes moveHor {
+	    0%   		{ left: 0px; }
+	    12.5%  		{ left: -@sq; }
+	    25%  		{ left: -(@sq * 2); }
+	    37.5%  		{ left: -(@sq * 3); }
+	    50% 		{ left: -(@sq * 4); }
+	    62.5% 		{ left: -(@sq * 5); }
+	    75% 		{ left: -(@sq * 6); }
+	    87.5% 		{ left: -(@sq * 7); }
+	    100% 		{ left: -(@sq * 8); }
+	}
+
+	@keyframes moveVert {
+	    from		{ top: 	0px; }
+	    to 			{ top: -(@sq * 9); }
+	}
+
+}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	@@include('scaff/layout__meta-tags.html')
+	@@include('scaff/layout__css-list.html')
+
+
+	<title>3d Rotate Demo</title>
+
+
+	<!-- здесь подключай свои стили -->
+	<!-- НАПРИМЕР: <link rel="stylesheet" href="css/catalog.min.css"> -->
+</head>
+<body>
+	<div class="page">
+		<header class="page__header">
+			@@include('scaff/layout__header.html')
+		</header>
+
+
+		<main class="page__content">
+			<div class="section section__inner">
+				<div class="pcard-3d-rotate _scale-3d">
+					<img src="images/3d_rotate/test_3d.jpg" alt="">
+				</div>
+			</div>
+		</main>
+
+
+		<footer class="page__footer">
+			@@include('scaff/layout__footer.html')
+		</footer>
+	</div>
+
+	@@include('scaff/layout__js-list.html')
+
+	<script>
+		$(document).ready(function() {
+			function 3d-rotate() {
+				// code
+			}
+		});
+	</script>
+</body>
+</html>

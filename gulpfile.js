@@ -357,7 +357,7 @@ gulp.task('img:build', function() {
 		.pipe(imagemin({
 			interlaced: true,
 			progressive: true,
-			optimizationLevel: 8,
+			optimizationLevel: 7,
 			svgoPlugins: [{removeViewBox: true}]
 		}))
 		.pipe(gulp.dest(dest));
@@ -369,7 +369,7 @@ gulp.task('img:build-all', function() {
 		.pipe(imagemin({
 			interlaced: true,
 			progressive: true,
-			optimizationLevel: 8,
+			optimizationLevel: 7,
 			svgoPlugins: [{removeViewBox: true}]
 		}))
 		.pipe(gulp.dest(dest));
