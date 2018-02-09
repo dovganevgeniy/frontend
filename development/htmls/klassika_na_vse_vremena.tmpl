@@ -35,7 +35,7 @@
 
 							</div>
 
-
+							<!-- счетчик -->
 							<div class="countdown">
 								<div class="bloc-time days" data-init-value="15">
 									<div class="figure days days-1">
@@ -138,8 +138,6 @@
 								</div>
 							</div>
 							
-								
-
 							<!-- видео -->
 							<div class="promo-page__banner-video">
 								<table>
@@ -162,6 +160,60 @@
 									</tr>
 								</table>
 							</div>
+
+						</div>
+					</div>
+
+					<div class="promo-page__inform">
+						<div class="section__inner">
+							<div class="promo-page__inform-main">
+								<img src="../images/promo-page/icon/priz.png" alt="priz">
+								<div class="promo-page__inform-main__title">
+									Главные призы
+								</div>
+							</div>
+							<div class="promo-page__inform-other">
+								<img src="../images/promo-page/icon/samolet.png" alt="samolet">
+								<div class="promo-page__inform-other__text">
+									<span>1 место</span>
+									Поездка на три дня<br> в Париж на двоих.
+								</div>
+							</div>
+							<div class="promo-page__inform-other">
+								<img src="../images/promo-page/icon/sertificat.png" alt="sertificat">
+								<div class="promo-page__inform-other__text">
+									<span>2 место</span>
+									Сертификат<br> на 25 000 рублей.
+								</div>
+							</div>
+							<div class="promo-page__inform-other">
+								<img src="../images/promo-page/icon/sertificat.png" alt="sertificat">
+								<div class="promo-page__inform-other__text">
+									<span>3 место</span>
+									Сертификат<br> на 15 000 рублей.
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="promo-page__registration">
+						<div class="section__inner">
+							
+							<a href="" class="promo-page__registration-image">
+								<img src="" alt="">
+							</a>
+
+							<form action="" class="promo-page__registration-form">
+								<div class="promo-page__registration-form__title">
+									Регистрация участников
+								</div>
+								<div class="form__field">
+									<input type="text" class="form__field-input numbers" placeholder="000.0000.000000.0000">	
+								</div>
+								
+								<!-- <button data-btn="applycoupon">Применить</button> -->
+								
+							</form>
 
 						</div>
 					</div>
@@ -310,7 +362,7 @@
 		    $back_bottom.find('span').html(value);
 
 		    // Then animate
-		    TweenMax.to($top, .9, {
+		    TweenMax.to($top, .85, {
 		        rotationX           : '-180deg',
 		        transformPerspective: 300,
 			      ease                : Quart.easeOut,
@@ -324,7 +376,7 @@
 		        }
 		    });
 
-		    TweenMax.to($back_top, .9, { 
+		    TweenMax.to($back_top, .85, { 
 		        rotationX           : 0,
 		        transformPerspective: 300,
 			      ease                : Quart.easeOut, 

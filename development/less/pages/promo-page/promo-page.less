@@ -5,6 +5,8 @@
 
 	clear: 					both;
 	position: 				relative;
+	//-webkit-font-smoothing: subpixel-antialiased;
+	-webkit-font-smoothing: antialiased;
 	
 	&__banner {
 
@@ -22,8 +24,7 @@
 				display: 		inline-block;
 				color: 			white;
 				text-transform: uppercase;
-				font: 			25px 'Circe-Thin';
-				font-weight: 	100;
+				font: 			28px 'Circe-Thin';
 				line-height: 	1.1;
 				letter-spacing: 1px;
 				padding-left: 	7px;	
@@ -113,6 +114,108 @@
 
 
 	}
+
+	&__inform {
+		&-main, &-other {
+			display: 	block;
+			width: 		25%;
+			float: 		left;
+			//padding-bottom: 15px;
+
+			img {
+				display: 		block;
+				float: 			left;
+				margin-right: 	10px;
+				margin-bottom: 	10px;
+			}
+		}
+
+		&-main {
+			padding-top: 18px;
+			
+			&__title {
+				font: 	30px/28px 'Circe-Light';
+				color: 	@color-red;
+				text-transform: 	uppercase;
+			}
+		}
+
+		&-other {
+			padding-top: 	22px;
+			padding-right: 	10px;
+			
+			&__text {
+				
+				display: 			block;
+				text-transform: 	uppercase;
+				line-height: 15px;
+
+				span {
+					font: 		12px 'Circe-Bold';
+					color: 		@color-red;	
+					display: 	block;
+				}
+				
+				
+			}
+		}
+	}
+
+	&__registration {
+		position: 			relative;
+		background-color: 	#f8f8f8;
+
+		padding: 			26px 0;
+		
+		@border: 			1px solid #cbcbcb;
+
+		border-top: 		@border;
+		border-bottom: 		@border;
+
+		&:before {
+			position: 	absolute;
+			top: 		10px;
+			display: 	block;
+		    height: 	9px;
+		    //content: 	'';
+		    background: url('../images/thingies/shadow-2.png') top center no-repeat;
+		}
+
+		&-image {
+			position: 	relative;
+			display: 	block;
+			float: 		left;
+			width: 		50%;
+			height: 	264px;
+			//border: 	1px solid red;
+			background-color: #333;
+		}
+
+		&-form {
+			position: 		relative;
+			display: 		block;
+			float: 			left;
+			width: 			50%;
+			padding-left: 	60px;
+
+			&__title {
+				font: 30px/30px 'Circe-Light';
+				font-weight: 		100;
+				text-transform: 	uppercase;
+				margin-bottom: 		20px;
+			}
+
+			.form__field {
+				width: 300px;
+
+				.numbers {
+					font: 20px 'Circe-Thin';
+				}
+			}
+		}
+
+
+	}
 }
 
 
@@ -136,6 +239,7 @@
 	display: 		inline-block;
 	padding: 		0;
 	margin-bottom: 	20px;
+	//-webkit-font-smoothing: subpixel-antialiased;
 }
 .countdown .bloc-time {
 	float: 			left;
@@ -180,25 +284,22 @@
 .countdown .figure {
   position: 		relative;
   float: 			left;
-  height: 			50px;
-  width: 			40px;
+  height: 			60px;
+  width: 			50px;
   margin-right: 	2px;
   background-color: white;
   border-radius: 	3px;
   overflow: 		hidden;
-  -moz-box-shadow: 
-  	0 2px 4px 0 rgba(0, 0, 0, 0.4);
-  -webkit-box-shadow: 
-  	0 2px 4px 0 rgba(0, 0, 0, 0.4);
-  box-shadow: 
-  	0 2px 4px 0 rgba(0, 0, 0, 0.4);
-	text-align: center;
+  // -moz-box-shadow: 		0 2px 4px 0 rgba(0, 0, 0, 0.4);
+  // -webkit-box-shadow: 	0 2px 4px 0 rgba(0, 0, 0, 0.4);
+  box-shadow: 			0 2px 4px 0 rgba(0, 0, 0, 0.4);
+  text-align: center;
 }
 .countdown .figure:last-child {
   margin-right: 0;
 }
 .countdown .figure + .figure {
-	border-radius: 3px;
+	//border-radius: 3px;
 	text-align: center;
 }
 
@@ -207,16 +308,15 @@
   left: 			0;
   right: 			0;
   margin: 			auto;
-  font: normal 35px/57px'Circe-Bold';
-  font-weight: 		700;
-  //color: 			@color-red;
-  color: 			darken(@color-red, 10%);
+  font: normal 45px 'Circe-Bold';
+  color: 			@color-red;
+  //color: 			darken(@color-red, 10%);
 }
 .countdown .figure .top:after, .countdown .figure .bottom-back:after {
   content: "";
   position: absolute;
   z-index: -1;
-  left: 0;
+  left: 1px;
   bottom: 0;
   width: 100%;
   height: 100%;
@@ -233,19 +333,20 @@
   //border-bottom: 1px solid #cf1320;
 }
 .countdown .figure .top {
-  z-index: 3;
-  background-color: 			#f8f8f8;
-  transform-origin: 			50% 100%;
-  -webkit-transform-origin: 	50% 100%;
-  -moz-border-radius-topleft: 	10px;
-  -webkit-border-top-left-radius: 10px;
-  border-top-left-radius: 		10px;
-  -moz-border-radius-topright: 	10px;
-  -webkit-border-top-right-radius: 10px;
-  border-top-right-radius: 		10px;
-  -moz-transform: perspective(200px);
-  -ms-transform: perspective(200px);
-  -webkit-transform: perspective(200px);
+  	z-index: 3;
+  	background-color: 			#f8f8f8;
+  	transform-origin: 			50% 100%;
+  	//-webkit-transform-origin: 	50% 100%;
+
+  // -moz-border-radius-topleft: 	10px;
+  // -webkit-border-top-left-radius: 10px;
+  // border-top-left-radius: 		10px;
+  // -moz-border-radius-topright: 	10px;
+  // -webkit-border-top-right-radius: 10px;
+  // border-top-right-radius: 		10px;
+  // -moz-transform: perspective(200px);
+  // -ms-transform: perspective(200px);
+  // -webkit-transform: perspective(200px);
   transform: perspective(200px);
 }
 .countdown .figure .bottom {
@@ -267,12 +368,12 @@
   height: 50%;
   overflow: hidden;
   background-color: #f8f8f8;
-  -moz-border-radius-topleft: 10px;
-  -webkit-border-top-left-radius: 10px;
-  border-top-left-radius: 10px;
-  -moz-border-radius-topright: 10px;
-  -webkit-border-top-right-radius: 10px;
-  border-top-right-radius: 10px;
+  // -moz-border-radius-topleft: 10px;
+  // -webkit-border-top-left-radius: 10px;
+  // border-top-left-radius: 10px;
+  // -moz-border-radius-topright: 10px;
+  // -webkit-border-top-right-radius: 10px;
+  // border-top-right-radius: 10px;
 }
 .countdown .figure .bottom-back span {
   position: absolute;
@@ -284,21 +385,22 @@
 .countdown .figure .top, .countdown .figure .top-back {
   height: 50%;
   overflow: hidden;
-  -moz-backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+  // -moz-backface-visibility: hidden;
+  // -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
 .countdown .figure .top-back {
   z-index: 4;
   bottom: 0;
   background-color: white;
-  box-shadow: 0 10px 15px rgba(0,0,0,0.5);
-  -webkit-transform-origin: 50% 0;
+  box-shadow: 0 15px 15px rgba(0,0,0,0.5);
+  // -webkit-transform-origin: 50% 0;
   transform-origin: 50% 0;
-  -moz-transform: perspective(200px) rotateX(180deg);
-  -ms-transform: perspective(200px) rotateX(180deg);
-  -webkit-transform: perspective(200px) rotateX(180deg);
+  // -moz-transform: perspective(200px) rotateX(180deg);
+  // -ms-transform: perspective(200px) rotateX(180deg);
+  // -webkit-transform: perspective(200px) rotateX(180deg);
   transform: perspective(200px) rotateX(180deg);
+
   // -moz-border-radius-bottomleft: 10px;
   // -webkit-border-bottom-left-radius: 10px;
   // border-bottom-left-radius: 10px;
