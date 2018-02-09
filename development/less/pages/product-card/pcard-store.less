@@ -224,6 +224,7 @@
 		transform: rotate(180deg);
 	}
 	&__signUp{
+		display: none;
 		text-align: center;
 		font-size: 14px;
 		padding: 0 10px;
@@ -239,7 +240,7 @@
 	}
 
 	&__date{
-		display: inline-block;
+		display: none;
 		text-transform: uppercase;
 		padding-left: 20px;
 		&:before{
@@ -257,7 +258,7 @@
 	}
 
 	&__stores {
-		display: inline-block;
+		display: none;
 		text-transform: uppercase;
 		float: right;
 		padding-right: 20px;
@@ -269,6 +270,23 @@
 
 	@media @mobile-portrait {
 
+	}
+
+	&[data-type="soon"]{
+		display: block;
+
+		.pcard-store-delivery__signUp{
+			display: block;
+		}
+	}
+
+	&:not([data-type="soon"]){
+		display: block;
+
+		.pcard-store-delivery__date,
+		.pcard-store-delivery__stores{
+			display: inline-block;
+		}
 	}
 }
 
