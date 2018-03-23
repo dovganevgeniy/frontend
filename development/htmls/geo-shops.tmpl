@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<!-- @@include('scaff/layout__meta-tags.html') -->
+	@@include('scaff/layout__css-list.html')
+
+
+	<title>Shop Page</title>
+	
+	<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+	<!-- здесь подключай свои стили -->
+	<!-- НАПРИМЕР: <link rel="stylesheet" href="css/catalog.min.css"> -->
+</head>
+<body>
+	<div class="page">
+		<header class="page__header">
+			@@include('scaff/layout__header.html')
+		</header>
+
+
+		<main class="page__content">
+			
+			<div class="clearfix"></div>
+
+			<div class="section__inner text-center">
+				<br>
+				<button class="btn b-button" style="width:200px;" id="search-geo">Поиск геолокации</button>
+				
+				<br>
+				
+				<div class="geopositions uppercase font-size-1_5">
+					<span class="lat"><b></b></span>
+					<span class="long"><b></b></span>
+				</div>
+							
+				<br>				
+			</div>
+
+			<div id="map-geo" style="overflow: hidden; border-radius: 20px; margin-bottom: 20px; height: 500px;"></div>
+
+		</main>
+
+
+		<footer class="footer">
+			@@include('scaff/layout__footer.html')
+		</footer>
+	</div>
+
+	@@include('scaff/layout__js-list.html')
+	<!-- <script src="js/shop-page.min.js"></script> -->
+	
+	<script type="text/javascript">
+	
+		$(document).ready(function(){
+			$('#search-geo').click(function(e) {
+			e.preventDefault();
+			$('.geopositions > .lat').text('Поиск вашей локации...');
+			ymaps.ready(geoMap());			
+		});
+
+		// определение геолокации
+
+		function geoMap() {
+
+			console.log('GeoStart');
+			var lat;
+			var long;
+
+			// Проверить поддержку геолокации
+			if ('geolocation' in navigator) {
+			    // Идентификатор наблюдателя
+			    var watchID;
+			    // Получить координаты
+			    navigator.geolocation.getCurrentPosition(
+			        // Если удалось определить, то активировать наблюдателя
+			        function() {
+			            watchID = navigator.geolocation.watchPosition(
+			                // Обработчик геолокации
+			                geo_success,
+			                // Обработчик ошибок
+			                geo_error,
+			                // Дополнительные параметры
+			                {
+			                    // Повышенная точность определения
+			                    enableHighAccuracy : true,
+			                    // Время кэширования результата
+			                    maximumAge         : 30000,
+			                    // Время ожидания до генерации ошибки
+			                    timeout            : 20000
+			                }
+			            );
+			        },
+			        // Обработчик ошибок
+			        geo_error
+			    );
+			}
+			else {
+			    // Браузер не поддерживает геолокацию
+			    console.log('Geolocation is not supported');
+			    return;
+			}
+			 
+			// Обработчик геолокации
+			function geo_success(position) {
+				lat = position.coords.latitude;
+				long = position.coords.longitude;
+			    //console.log(lat + ' : ' + long);
+			    $('.geopositions > .lat').html('Lat: <b>'+lat+'</b>');
+			    $('.geopositions > .long').html('Long: <b>'+long+'</b>');		
+			    mapgeo();
+			}
+			 
+			// Обработчик ошибок
+			function geo_error(error) {
+			    // Деактивировать наблюдателя
+			    navigator.geolocation.clearWatch(watchID);
+			    // Значения error.code:
+			    // 1 - User denied Geolocation
+			    // 2 - Unable to acquire location
+			    // 3 - Timeout expired
+			    $('.geopositions > .lat').text('ERROR (' + error.code + '): ' + error.message);
+			    //console.log('ERROR (' + error.code + '): ' + error.message);
+			}
+
+			
+
+
+			// инициализация карты
+
+			
+
+			function mapgeo() {
+			    var myMap = new ymaps.Map('map-geo', {
+		            center: [lat, long],
+		            zoom: 16,
+		            controls: ['zoomControl']
+	    		}, {
+	        		searchControlProvider: 'yandex#search'
+	    		});    
+
+	    		//myMap.behaviors.enable('scrollZoom');
+	    		myMap.behaviors.disable('scrollZoom');
+
+			    
+			    /**
+				 Метка на карте
+				 */
+				var storesPlacemarkCollection = new ymaps.GeoObjectCollection();
+				var storesPlacemarks;
+				
+				storesPlacemarks = new ymaps.Placemark([lat, long],
+			 	{
+			 		storeIDByGPS: lat + '__' + long,
+			 		storeGPSCoords: [lat, long],
+			 	},
+			 	{
+			 		iconLayout: 'default#image',
+			 		iconImageHref: '/bitrix/templates/zoloto/frontend/images/sprites/sprite__primary-icon-set.png', 
+			 		iconImageSize: [33, 44],
+			 		iconImageClipRect: [[99, 393], [132, 437]]
+			 	});
+			 	storesPlacemarkCollection.add(storesPlacemarks);
+							
+				myMap.geoObjects.add(storesPlacemarkCollection);		    
+			}
+		}
+			
+		});
+	</script>
+
+</body>
+</html>
