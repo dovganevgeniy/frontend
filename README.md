@@ -132,6 +132,8 @@ git pull upstream master
 - 2.0.x
 	- 2.0.3
 		- Добавлен vue-inputmask для масок в инпутах
+		- Добавлен новый минимизатор js uglify-es
+		- Добавлен js-cookie для работы с куками
 	- 2.0.2
 		- Добавлен babel-plugin-transform-object-rest-spread для распространения объектов ...mapState, etc.
 		- Добавлен axios для запросов

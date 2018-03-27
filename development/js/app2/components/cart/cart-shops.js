@@ -88,6 +88,7 @@ const CartShops = {
 
 	mounted() {
 		const vm = this
+		var event = document.createEvent('Event');
 
 		window.addEventListener('resize', () => {
 			const tab = window.screen.width >= 768 ? 'all' : 'shopList'
@@ -95,7 +96,8 @@ const CartShops = {
 			vm.$store.commit('CartShops/setTab', tab)
 		})
 		
-		window.dispatchEvent(new Event('resize'))
+		event.initEvent('resize', false, true)
+		window.dispatchEvent(event)
 	},
 
 	methods: {
@@ -305,8 +307,8 @@ const CartShops = {
 	}
 }
 
-Vue.component('CartShops', CartShops)
+Vue.component('CartShops', CartShops);
 
-export default CartShops
+export default CartShops;
 
 

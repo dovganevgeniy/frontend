@@ -49,6 +49,6 @@ const CartClearConfirm = {
 	}
 }
 
-Vue.component('CartClearConfirm', CartClearConfirm)
+Vue.component('CartClearConfirm', CartClearConfirm);
 
-export default CartClearConfirm
+export default CartClearConfirm;

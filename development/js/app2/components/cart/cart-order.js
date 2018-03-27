@@ -71,6 +71,6 @@ const CartOrder = {
 	}
 }
 
-Vue.component('CartOrder', CartOrder)
+Vue.component('CartOrder', CartOrder);
 
-export default CartOrder
+export default CartOrder;

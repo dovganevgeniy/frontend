@@ -1,13 +1,21 @@
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const glob = require('glob-all');
 const webpack = require('webpack');
 
 const config = {
 	context: __dirname,
 
+	resolve: {
+		alias: {
+			masonry: 'masonry-layout',
+			isotope: 'isotope-layout'
+		},
+		modules: ['bower_components', 'node_modules']
+	},
+
 	entry: {
-		app: glob.sync([
+		app2: glob.sync([
+			'./node_modules/babel-polyfill/dist/polyfill.min.js',
 			'!./development/js/app2/*.js',
 			'./development/js/app2/components/**/*.js',
 			'./development/js/app2/*.js',
@@ -16,15 +24,14 @@ const config = {
 
 	output: {
 		path: `${__dirname}/WEBPACK_TEST`,
-		//filename: '[name].js'
-		filename: 'app2.js'
+		filename: '[name].js'
 	},
 
 	module: {
 		rules: [
 			{
 				test: /\.js$/,
-				exclude: /(node_modules(?!\/(vue-clicky))|bower_components)/,
+				//exclude: /(node_modules(?!\/(vue-clicky))|bower_components)/,
 				use: {
 					loader: 'babel-loader'
 				}
@@ -66,7 +73,7 @@ const config = {
 		new webpack.ProvidePlugin({
 			//$: 'jquery',
 			//jQuery: 'jquery',
-			Vue: 'vue/dist/vue.js'
+			//Vue: 'vue/dist/vue.js'
 		})
 	],
 
@@ -79,9 +86,14 @@ const config = {
 	}
 }
 
-if (process.env.NODE_ENV === 'build') {
+if (process.env.NODE_ENV !== 'dev') {
 	config.plugins.push(
-		new UglifyJsPlugin({})
+		new webpack.optimize.UglifyJsPlugin({
+			compress: {
+				warnings: false,
+				drop_console: true
+			}
+		})
 	);
 }
 

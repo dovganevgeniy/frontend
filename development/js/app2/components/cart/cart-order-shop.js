@@ -48,4 +48,4 @@ Vue.component('CartOrderShop', {
 		}
 	}
 	
-})
+});

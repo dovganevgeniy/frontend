@@ -83,6 +83,6 @@ const CartItem = {
 	}
 }
 
-Vue.component('CartItem', CartItem)
+Vue.component('CartItem', CartItem);
 
-export default CartItem
+export default CartItem;

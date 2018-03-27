@@ -17,7 +17,7 @@
 		var el = ['2','=','1','='];
 		var i = 0;
 
-		var mainmenu = $('.header-bottom');
+		var mainmenu = $('.header-menu, .main-nav-item__dropdown');
 
 		mainmenu.hover(
 			function() {
@@ -98,6 +98,10 @@
 
       			//console.log(posObjx+' : '+posObjy);
  			}
+
+ 			$('.close-zone').click(function() {
+ 				mouseOver = false;	
+ 			});
 
 		}
 

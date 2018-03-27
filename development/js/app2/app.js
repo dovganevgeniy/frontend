@@ -1,7 +1,7 @@
 import Vue from 'vue/dist/vue';
 import bowser from 'bowser';
 import store from './app.store';
-import 'vue-clicky';
+//import 'vue-clicky';
 import { mapState, mapMutations } from 'vuex';
 import { FingerprintSpinner } from 'epic-spinners'
 import VModal from 'vue-js-modal'

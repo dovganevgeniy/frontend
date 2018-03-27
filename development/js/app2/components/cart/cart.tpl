@@ -126,7 +126,7 @@
 					</template>
 					<template v-else>
 						<i>ИТОГО:</i> {{ data.total_price | thousandSeparator }} Р
-						<span>ЭКОНОМЬ С БОНУСНОЙ КАРТОЙ <span>-3000 P</span></span>
+						<span v-if="discount > 0">ЭКОНОМЬ С БОНУСНОЙ КАРТОЙ <span>-{{ discount | thousandSeparator }} P</span></span>
 					</template>
 				</div>
 
@@ -282,6 +282,11 @@
 			>
 				Оформить заказ
 			</button>
+		</div>
+
+		<div class="cart-bonus-success" v-if="footTab == 'noCard'">
+			<div class="cart-bonus-success__title">Благодарим вас за регистрацию <br>в бонусной программе лояльности.</div>
+			<div class="cart-bonus-success__num">Ваша новая карта: <span>0</span></div>
 		</div>
 	</div>
 

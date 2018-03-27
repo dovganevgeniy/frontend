@@ -35,10 +35,15 @@ const CartRemoveConfirm = {
 
 	props: [],
 
+	computed: {
+		...mapGetters('Cart', ['selectedItem']),
+	},
+
 	methods: {
 		...mapMutations('Cart', [
 			'setRemoveIndex'
 		]),
+
 		close(remove) {
 			if (remove === true) {
 				this.$store.commit('Cart/setRemoveIndex')
@@ -49,6 +54,6 @@ const CartRemoveConfirm = {
 	}
 }
 
-Vue.component('CartRemoveConfirm', CartRemoveConfirm)
+Vue.component('CartRemoveConfirm', CartRemoveConfirm);
 
-export default CartRemoveConfirm
+export default CartRemoveConfirm;

@@ -192,6 +192,6 @@ const CartItemCopy = {
 	}
 }
 
-Vue.component('CartItemCopy', CartItemCopy)
+Vue.component('CartItemCopy', CartItemCopy);
 
-export default CartItemCopy
+export default CartItemCopy;

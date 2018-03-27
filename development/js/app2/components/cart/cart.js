@@ -3,6 +3,7 @@ import { mapState, mapGetters, mapMutations } from 'vuex'
 import axios from 'axios'
 import qs from 'qs'
 import store from '../../app.store'
+import Cookies from 'js-cookie'
 
 /*
 |------------------------------------------------------------------------------
@@ -65,10 +66,19 @@ store.registerModule('Cart', {
 		},
 
 		discount(state) {
-			let wholePrice = +state.data.whole_price.replace(/\D/g, '')
-			let totalPrice = +state.data.total_price.replace(/\D/g, '')
+			const totalSum = state.data.items.reduce((sum, item) => 
+				sum + (+item.discount_price
+					.replace(/\..?$/, '')
+					.replace(/\D/g, '')
+				), 0)
 
-			return wholePrice - totalPrice
+			const totalSumBc = state.data.items.reduce((sum, item) => 
+				sum + (+item.price_bc
+					.replace(/\..?$/, '')
+					.replace(/\D/g, '')
+				), 0)
+
+			return totalSum - totalSumBc
 		},
 
 		city: state => state.data.city || state.conf.city,
@@ -335,7 +345,7 @@ const Cart = {
 				value: e.target.value
 			})
 
-			$.cookie('cart.'+ e.target.name, e.target.value)
+			Cookies.set('cart.'+ e.target.name, e.target.value, { expires: 7 });
 		},
 
 		// Отправка запроса в api
@@ -343,8 +353,7 @@ const Cart = {
 			const vm = this
 
 			let data = Object.assign(options.data || {}, {
-				// Кука корзины (@TODO: переписать на нативе)
-				[vm.conf.cookieKey]: $.cookie(vm.conf.cookieKey) || ''
+				[vm.conf.cookieKey]: Cookies.get(vm.conf.cookieKey)|| ''
 			})
 
 			if (options.preloader === true) {
@@ -408,7 +417,7 @@ const Cart = {
 						sendMethod: 'post',
 						preloader: true,
 						data: {
-							phone: $.cookie('cart.cardPhone'),
+							phone: Cookies.get('cart.cardPhone'),
 							ch_code: ''
 						},
 						onResponse(response) {
@@ -503,7 +512,7 @@ const Cart = {
 		// Применение бонусной карты
 		applyBonusCard($event) {
 			const vm = this
-			let phone = vm.inputs.cardPhone
+			let phone = Cookies.get('cart.cardPhone')
 				.replace(/\D/g, '')
 				.substring(1)
 
@@ -656,7 +665,7 @@ const Cart = {
 					ecommerce: {
 						purchase: {
 							actionField: {
-								id: orderid,
+								id: vm.data.orders.order_create[orderid],
 								revenue: items.reduce((sum, item) => 
 									sum + (+item.total_price
 										.replace(/\..?$/, '')
@@ -788,6 +797,6 @@ const Cart = {
 	}
 }
 
-Vue.component('Cart', Cart)
+Vue.component('Cart', Cart);
 
-export default Cart
+export default Cart;
