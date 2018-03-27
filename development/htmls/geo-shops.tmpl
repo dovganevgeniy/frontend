@@ -24,7 +24,7 @@
 
 			<div class="section__inner text-center">
 				<br>
-				<button class="btn b-button" style="width:200px;" id="search-geo">Поиск геолокации</button>
+				<!-- <button class="btn b-button" style="width:200px;" id="search-geo">Поиск геолокации</button> -->
 				
 				<br>
 				
@@ -41,9 +41,6 @@
 		</main>
 
 
-		<footer class="footer">
-			@@include('scaff/layout__footer.html')
-		</footer>
 	</div>
 
 	@@include('scaff/layout__js-list.html')
@@ -52,10 +49,13 @@
 	<script type="text/javascript">
 	
 		$(document).ready(function(){
-			$('#search-geo').click(function(e) {
-			e.preventDefault();
-			$('.geopositions > .lat').text('Поиск вашей локации...');
-			ymaps.ready(geoMap());			
+
+			$('.geopositions > .lat').text('Поиск вашей локации');
+			$('.geopositions > .long').text('...');
+
+			geoMap();	
+			
+			
 		});
 
 		// определение геолокации
@@ -63,6 +63,7 @@
 		function geoMap() {
 
 			console.log('GeoStart');
+
 			var lat;
 			var long;
 
@@ -106,8 +107,10 @@
 				long = position.coords.longitude;
 			    //console.log(lat + ' : ' + long);
 			    $('.geopositions > .lat').html('Lat: <b>'+lat+'</b>');
-			    $('.geopositions > .long').html('Long: <b>'+long+'</b>');		
-			    mapgeo();
+			    $('.geopositions > .long').html('Long: <b>'+long+'</b>');
+			    console.log(lat+' : '+long);
+			    ymaps.ready(mapgeo());	
+			    navigator.geolocation.clearWatch(watchID);	
 			}
 			 
 			// Обработчик ошибок
@@ -119,7 +122,7 @@
 			    // 2 - Unable to acquire location
 			    // 3 - Timeout expired
 			    $('.geopositions > .lat').text('ERROR (' + error.code + '): ' + error.message);
-			    //console.log('ERROR (' + error.code + '): ' + error.message);
+			    console.log('ERROR (' + error.code + '): ' + error.message);
 			}
 
 			
@@ -163,9 +166,8 @@
 							
 				myMap.geoObjects.add(storesPlacemarkCollection);		    
 			}
-		}
 			
-		});
+		}
 	</script>
 
 </body>

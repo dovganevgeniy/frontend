@@ -2,6 +2,71 @@ import Vue from 'vue/dist/vue'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 import store from '../../app.store'
 
+// определение геолокации
+
+var lat;
+var long;
+//console.log(lat);
+var geo = false;
+var geoSucc = false;
+
+geoMap();
+
+function geoMap() {
+
+	if ('geolocation' in navigator) {
+
+	    var watchID;
+	    // Получить координаты
+	    navigator.geolocation.getCurrentPosition(
+	        // Если удалось определить, то активировать наблюдателя
+	        function() {
+	            watchID = navigator.geolocation.watchPosition(
+	                // Обработчик геолокации
+	                geo_success,
+	                // Обработчик ошибок
+	                geo_error,
+	                // Дополнительные параметры
+	                {
+	                    // Повышенная точность определения
+	                    enableHighAccuracy : true,
+	                    // Время кэширования результата
+	                    maximumAge         : 30000,
+	                    // Время ожидания до генерации ошибки
+	                    timeout            : 20000
+	                }
+	            );
+	        },
+	        // Обработчик ошибок
+	        geo_error
+	    );
+	}
+	
+	 
+	// Обработчик геолокации
+	function geo_success(position) {
+		lat = position.coords.latitude;
+		long = position.coords.longitude;
+		navigator.geolocation.clearWatch(watchID);	
+	    
+	    console.log(lat+' : '+long);
+	    geo = true;
+	    geoSucc = true;
+	}
+	 
+	// Обработчик ошибок
+	function geo_error(error) {
+	    // Деактивировать наблюдателя
+	    navigator.geolocation.clearWatch(watchID);
+	    // Значения error.code:
+	    // 1 - User denied Geolocation
+	    // 2 - Unable to acquire location
+	    // 3 - Timeout expired
+	    console.log('ERROR (' + error.code + '): ' + error.message);
+	    geo = true;
+	}
+}
+
 /*
 |------------------------------------------------------------------------------
 | Модалка со списком и картой магазинов
@@ -123,8 +188,17 @@ const CartShops = {
 
 			coords = [ curShop.shopLat, curShop.shopLon ];
 
+
 			const checkApiLoaded = setInterval(() => {
-				if (typeof ymaps !== 'undefined') {
+				if (typeof ymaps !== 'undefined' && geo) {
+
+					if ( geoSucc ) {
+						coords = [ lat , long ];
+						this.zoom = 14;
+					}
+
+					console.log(coords);
+
 					ymaps.ready(() => {
 						// инициализация карты
 						vm.map = new ymaps.Map(
