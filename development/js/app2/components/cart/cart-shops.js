@@ -2,71 +2,6 @@ import Vue from 'vue/dist/vue'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 import store from '../../app.store'
 
-// определение геолокации
-
-var lat;
-var long;
-
-var geo = false;
-var geoSucc = false;
-
-geoMap();
-
-function geoMap() {
-
-	if ('geolocation' in navigator) {
-
-	    var watchID;
-	    // Получить координаты
-	    navigator.geolocation.getCurrentPosition(
-	        // Если удалось определить, то активировать наблюдателя
-	        function() {
-	            watchID = navigator.geolocation.watchPosition(
-	                // Обработчик геолокации
-	                geo_success,
-	                // Обработчик ошибок
-	                geo_error,
-	                // Дополнительные параметры
-	                {
-	                    // Повышенная точность определения
-	                    enableHighAccuracy : true,
-	                    // Время кэширования результата
-	                    maximumAge         : 30000,
-	                    // Время ожидания до генерации ошибки
-	                    timeout            : 20000
-	                }
-	            );
-	        },
-	        // Обработчик ошибок
-	        geo_error
-	    );
-	}
-	
-	 
-	// Обработчик геолокации
-	function geo_success(position) {
-		lat = position.coords.latitude;
-		long = position.coords.longitude;
-		navigator.geolocation.clearWatch(watchID);	
-	    
-	    console.log(lat+' : '+long);
-	    geo = true;
-	    geoSucc = true;
-	}
-	 
-	// Обработчик ошибок
-	function geo_error(error) {
-	    // Деактивировать наблюдателя
-	    navigator.geolocation.clearWatch(watchID);
-	    // Значения error.code:
-	    // 1 - User denied Geolocation
-	    // 2 - Unable to acquire location
-	    // 3 - Timeout expired
-	    console.log('ERROR (' + error.code + '): ' + error.message);
-	    geo = true;
-	}
-}
-
 /*
 |------------------------------------------------------------------------------
 | Модалка со списком и картой магазинов
@@ -109,6 +44,9 @@ store.registerModule('CartShops', {
 | Объявление объекта опций компонента
 |------------------------------------------------------------------------------
 */
+
+var zoom;
+
 const CartShops = {	
 	template: require('./cart-shops.tpl'),
 
@@ -192,15 +130,7 @@ const CartShops = {
 
 
 			const checkApiLoaded = setInterval(() => {
-				if (typeof ymaps !== 'undefined' && geo) {
-
-					var zoom = vm.zoom;
-
-					if ( geoSucc ) {
-
-						coords = [ lat , long ];
-						zoom = 14;
-					}
+				if (typeof ymaps !== 'undefined') {
 
 					console.log(coords);
 
@@ -210,7 +140,7 @@ const CartShops = {
 							vm.mapid,
 							{
 								center: coords,
-								zoom: zoom,
+								zoom: vm.zoom,
 								controls: []
 							},
 							{
@@ -396,8 +326,69 @@ const CartShops = {
 	}
 }
 
+
+// определение геолокации
+
+var lat;
+var long;
+
+function geoMap() {
+
+	if ('geolocation' in navigator) {
+
+	    var watchID;
+	    // Получить координаты
+	    navigator.geolocation.getCurrentPosition(
+	        // Если удалось определить, то активировать наблюдателя
+	        function() {
+	            watchID = navigator.geolocation.watchPosition(
+	                // Обработчик геолокации
+	                geo_success,
+	                // Обработчик ошибок
+	                geo_error,
+	                // Дополнительные параметры
+	                {
+	                    // Повышенная точность определения
+	                    enableHighAccuracy : true,
+	                    // Время кэширования результата
+	                    maximumAge         : 30000,
+	                    // Время ожидания до генерации ошибки
+	                    timeout            : 20000
+	                }
+	            );
+	        },
+	        // Обработчик ошибок
+	        geo_error
+	    );
+	}
+	
+	 
+	// Обработчик геолокации
+	function geo_success(position) {
+		lat = position.coords.latitude;
+		long = position.coords.longitude;
+		navigator.geolocation.clearWatch(watchID);	
+	    
+	    console.log(lat+' : '+long);
+	 	vm.map.setCenter([ lat, long ], 14);  
+	}
+	 
+	// Обработчик ошибок
+	function geo_error(error) {
+	    // Деактивировать наблюдателя
+	    navigator.geolocation.clearWatch(watchID);
+	    // Значения error.code:
+	    // 1 - User denied Geolocation
+	    // 2 - Unable to acquire location
+	    // 3 - Timeout expired
+	    console.log('ERROR (' + error.code + '): ' + error.message);
+	}
+}
+
 Vue.component('CartShops', CartShops);
 
 export default CartShops;
+
+geoMap();
 
 
