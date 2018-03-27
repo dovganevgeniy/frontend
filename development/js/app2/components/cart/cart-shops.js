@@ -6,7 +6,7 @@ import store from '../../app.store'
 
 var lat;
 var long;
-//console.log(lat);
+
 var geo = false;
 var geoSucc = false;
 
@@ -186,15 +186,20 @@ const CartShops = {
 				curShop = vm.itemShops[0]
 			}
 
+			
+
 			coords = [ curShop.shopLat, curShop.shopLon ];
 
 
 			const checkApiLoaded = setInterval(() => {
 				if (typeof ymaps !== 'undefined' && geo) {
 
+					var zoom = vm.zoom;
+
 					if ( geoSucc ) {
+
 						coords = [ lat , long ];
-						this.zoom = 14;
+						zoom = 14;
 					}
 
 					console.log(coords);
@@ -205,7 +210,7 @@ const CartShops = {
 							vm.mapid,
 							{
 								center: coords,
-								zoom: vm.zoom,
+								zoom: zoom,
 								controls: []
 							},
 							{
@@ -231,13 +236,23 @@ const CartShops = {
 								this.zoomInCallback = ymaps.util.bind(this.zoomIn, this);
 								this.zoomOutCallback = ymaps.util.bind(this.zoomOut, this);
 
-								$('.modal-shops__zoom--in').bind('click', this.zoomInCallback);
-								$('.modal-shops__zoom--out').bind('click', this.zoomOutCallback);
+								document
+									.querySelector('.modal-shops__zoom--in')
+									.addEventListener('click', this.zoomInCallback)
+
+								document
+									.querySelector('.modal-shops__zoom--out')
+									.addEventListener('click', this.zoomOutCallback)
 							},
 
 							clear: function () {
-								$('.modal-shops__zoom--in').unbind('click', this.zoomInCallback);
-								$('.modal-shops__zoom--out').unbind('click', this.zoomOutCallback);
+								document
+									.querySelector('.modal-shops__zoom--in')
+									.removeEventListener('click', this.zoomInCallback)
+
+								document
+									.querySelector('.modal-shops__zoom--out')
+									.removeEventListener('click', this.zoomOutCallback)
 
 								ZoomLayout.superclass.clear.call(this);
 							},
@@ -276,7 +291,7 @@ const CartShops = {
 									iconImageSize: [33, 44],
 									iconImageClipRect: [[99, 393], [132, 437]],
 									hideIconOnBalloonOpen: false,
-									balloonOffset: [0, -100],
+									balloonOffset: [0, -100]
 								}
 							)
 
@@ -334,8 +349,8 @@ const CartShops = {
 						if (vm.shopid) {
 							vm.placemarks.forEach((e) => {
 								if (vm.shopid == e.properties.get('shopid')) {
-									e.balloon.open();
 									vm.map.setCenter(e.properties.get('coords'), 16)
+									e.balloon.open()
 								}
 							});
 						}
@@ -353,8 +368,8 @@ const CartShops = {
 
 			vm.placemarks.forEach((e) => {
 				if (shopid == e.properties.get('shopid')) {
-					e.balloon.open();
 					vm.map.setCenter(e.properties.get('coords'), 16)
+					e.balloon.open()
 				}
 			});
 		}

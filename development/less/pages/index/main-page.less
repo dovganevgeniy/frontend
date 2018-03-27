@@ -429,6 +429,24 @@ main
 	max-width: 1200px;
 }
 
+// убрать дефект слайдера при обновлении
+
+.index-sl {
+    max-height: 400px;
+
+    @media @touch {
+        max-height: 280px;
+    }
+
+    @media @tablet-under {
+        max-height: 230px;
+    }
+
+    @media (max-width: 599px) {
+        max-height: 390px;
+    }
+}
+
 .index-sl .owl-wrapper:after
 {
     display: table;
