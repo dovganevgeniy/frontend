@@ -547,11 +547,16 @@ const Cart = {
 							onResponse() {
 								if (vm.bonusCardCheck) {
 									// Если карта прошла убираем таб с формой
-									vm.$store.commit('Cart/setFootTab', '')
-								}
+									vm.$store.commit('Cart/setFootTab', '');
+                                    axios.get('/basket/ajax/unomi.php?phone='+ phone);
+
+                                    window.dataLayer = window.dataLayer || [];
+                                    dataLayer.push(
+                                        { 'event': 'UA event', 'eventCategory': 'Basket', 'eventAction': 'Применил БК', 'eventLabel': undefined }
+                                    );
+                                }
 							}
 						})
-                        axios.get('/basket/ajax/unomi.php?phone='+ phone)
                     }
 				})
 				.catch(error => {

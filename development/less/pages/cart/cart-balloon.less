@@ -4,16 +4,17 @@
 	top: 50%;
 	left: 50%;
 	width: 370px;
-	height: 190px;
+	//height: 190px;
 	z-index: 100;
 	transform: translate(-50%, -50%);
 	background-color: #fff;
 	padding: 30px;
+	padding-bottom: 40px;
 
 	@media @mobile-portrait {
 		width: 280px;
-		padding: 10px;
-		//height: auto;
+		padding: 12px;
+		padding-bottom: 45px;
 	}
 
 	&__close-btn{
@@ -68,9 +69,18 @@
 	&__select-btn{
 		display: block;
 		margin: 20px 0 0;
+		height: 	auto;
+		line-height: 1.4;
+		padding: 	10px 0;
+
+		@media @mobile-portrait {
+			//padding: 5px 0;
+			font-size: 12px;
+		}
 	}
 }
-
+/*
 ymaps[class*='places-pane']{
 	z-index: 99999 !important;
 }
+*/

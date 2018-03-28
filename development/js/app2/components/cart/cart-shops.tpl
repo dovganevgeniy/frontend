@@ -27,7 +27,7 @@
 						}
 					]"
 				>
-					<div class="modal-shops__shopAddress">{{ shop.address }}</div>
+					<div class="modal-shops__shopAddress">{{ shop.address }} {{shop.distance}}</div>
 					<!--
 					<span class="red">В наличии</span>
 					<div class="modal-shops__day">
