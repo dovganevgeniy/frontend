@@ -2,72 +2,72 @@ import Vue from 'vue/dist/vue'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 import store from '../../app.store'
 
-var zoom
-var geo_succ = false
-var geo_disable = false
-var lat
-var long
+//var geoCookie = $.cookie('geolocation-cookie');
+
+var zoom;
+var geo_succ = false;
+var geo_disable = false;
+var lat;
+var long;
 
 //----------------------------------------------
 // определение геолокации
 
 function geoMap() {
 
-	console.log('geoMap start');
+	let geo = navigator.geolocation
 
 	if ('geolocation' in navigator) {
 
-	    var watchID
+		console.log('geoMap start');
+
+	    var watchID;
 	    // Получить координаты
-	    navigator.geolocation.getCurrentPosition(
+	    geo.getCurrentPosition(
 	        // Если удалось определить, то активировать наблюдателя
 	        function() {
-	            watchID = navigator.geolocation.watchPosition(
+	            watchID = geo.watchPosition(
 	                // Обработчик геолокации
 	                geo_success,
 	                // Обработчик ошибок
-	                geo_error,
-	                // Дополнительные параметры
-	                {
-	                    // Повышенная точность определения
-	                    enableHighAccuracy : true,
-	                    // Время кэширования результата
-	                    maximumAge         : 30000,
-	                    // Время ожидания до генерации ошибки
-	                    timeout            : 20000
-	                }
+	                geo_error
 	            )
 	        },
 	        // Обработчик ошибок
 	        geo_error
-	    )
-	}	
+	    )	
+	}
+	
+
+	
+	
 	 
 	// Обработчик геолокации
 	function geo_success(position) {
-		lat = position.coords.latitude
-		long = position.coords.longitude
-		navigator.geolocation.clearWatch(watchID)	
+		lat = position.coords.latitude;
+		long = position.coords.longitude;
+		geo.clearWatch(watchID)	;
 	    
-	    console.log(lat+' : '+long)  
-	    console.log('geo success')
-	    geo_succ = true
+	    console.log(lat+' : '+long);  
+	    console.log('geo success');
+	    geo_succ = true;
+	    //$.cookie('geolocation-cookie', 'yes', {expires: 14, path: '/'});
 	}
 	 
 	// Обработчик ошибок
 	function geo_error(error) {
 	    // Деактивировать наблюдателя
-	    navigator.geolocation.clearWatch(watchID)
+	    geo.clearWatch(watchID);
 	    // Значения error.code:
 	    // 1 - User denied Geolocation
 	    // 2 - Unable to acquire location
 	    // 3 - Timeout expired
-	    console.log('ERROR (' + error.code + '): ' + error.message)
-	    geo_disable = true
+	    console.log('ERROR (' + error.code + '): ' + error.message);
+	    geo_disable = true;
 	}
 }
 
-geoMap()
+geoMap();
 
 // ---------------------------------------------
 
@@ -92,7 +92,8 @@ store.registerModule('CartShops', {
 			selectedShop: {},
 			shopid: 0,
 			activeTab: '',
-		}
+			distances: []
+		};
 	},
 
 	getters: {},
@@ -137,21 +138,21 @@ const CartShops = {
 	computed: {
 		...mapGetters('Cart', ['selectedItem', 'city']),
 		...mapState('Cart', ['data', 'shops']),
-		...mapState('CartShops', ['shopid', 'placemarks', 'activeTab']),
+		...mapState('CartShops', ['shopid', 'placemarks', 'activeTab', 'distances']),
 
 		itemShops(state) {
 			let itemid = +state.selectedItem.itemid
-			return state.shops[itemid]
+			return state.shops[itemid];
 		},
 
 		selectedShop(state) {
 			let shopid = +state.selectedItem.shopid
 
 			if (shopid == 0) {
-				return false
+				return false;
 			}
 
-			return state.itemShops.filter(shop => shop.xml_id == shopid)[0]
+			return state.itemShops.filter(shop => shop.xml_id == shopid)[0];
 		}
 	},
 
@@ -182,36 +183,33 @@ const CartShops = {
 			const vm = this
 			let curShop = vm.selectedShop
 			let coords = vm.center
-
-			zoom = vm.zoom;
+			let zoom = vm.zoom
 
 			vm.$store.commit('Cart/setShopid', 0)
 
 			if (curShop) {
-				vm.$store.commit('CartShops/setShopid', curShop.xml_id)
+				vm.$store.commit('CartShops/setShopid', curShop.xml_id);
 			} else {
-				curShop = vm.itemShops[0]
+				curShop = vm.itemShops[0];
 			}
+
+			if ( geo_succ == false ) {
+				coords = [ curShop.shopLat, curShop.shopLon ];
+			} else {
+				coords = [ lat , long ];
+				zoom = 14;
+			}	
 
 			if ( geo_disable == false ) {
 
 				const waitGeo = setInterval(function(){
-					console.log('wait..')
 					if ( geo_succ == true ) {
-						vm.map.setCenter([ lat, long ], 14)
-						console.log('wait SUCCESS')
-						clearInterval(waitGeo)			
+						clearInterval(waitGeo);			
+						vm.map.setCenter([ lat, long ], 14);
+					//	console.log('wait SUCCESS')
 					}
-				},1000)	
-
-
-			}
-
-			if ( geo_succ == false ) {
-				coords = [ curShop.shopLat, curShop.shopLon ]	
-			} else {
-				coords = [ lat , long ]
-				zoom = 14
+					//console.log('wait..')
+				},1000);	
 			}
 			
 
@@ -219,6 +217,7 @@ const CartShops = {
 				if (typeof ymaps !== 'undefined') {
 
 					ymaps.ready(() => {
+						let geolocation = ymaps.geolocation
 						// инициализация карты
 						vm.map = new ymaps.Map(
 							vm.mapid,
@@ -290,15 +289,36 @@ const CartShops = {
 						// Добавляем метки на карту
 						let placemarkCollection = new ymaps.GeoObjectCollection()
 
+
+						// метка нашего местоположения
+						geolocation.get({
+					        provider: 'browser',
+					        //mapStateAutoApply: true
+					    }).then(function (result) {
+					        // Синим цветом пометим положение, полученное через браузер.
+					        // Если браузер не поддерживает эту функциональность, метка не будет добавлена на карту.
+					        result.geoObjects.options.set('preset', 'islands#redCircleIcon');
+					        vm.map.geoObjects.add(result.geoObjects);
+					    });
+
+
 						vm.itemShops.forEach((shop, index) => {
 							let coords = [ shop.shopLat, shop.shopLon ];
 
-							let myPos = [ lat , long ]
-							let shopPos = coords
+							// расчет расстояния от гео позиции до магазина
 
-							//var km = Math.floor(ymaps.coordSystem.geo.getDistance(myPos, shopPos) / 1000)
-							var km = ymaps.coordSystem.geo.getDistance(myPos, shopPos) / 1000;
-				        	console.log(km+" км");
+							let myPos = [ lat , long ];
+							let shopPos = coords;
+
+							this.$store.commit('CartShops/setShopid');
+
+							if ( geo_succ ) {
+								vm.distances[index] = ' — '+(Math.round(ymaps.coordSystem.geo.getDistance(myPos, shopPos) / 1000))+' км';
+				        		//console.log('index - '+index+' : '+vm.distances[index])	
+				        		this.$store.commit('CartShops/setShopid', index);
+							}
+
+							// -------------------------------------------
 
 							vm.placemarks[index] = new ymaps.Placemark(coords,
 								{
@@ -321,7 +341,7 @@ const CartShops = {
 							placemarkCollection.add(vm.placemarks[index])
 						})
 
-						vm.map.geoObjects.add(placemarkCollection);
+						vm.map.geoObjects.add(placemarkCollection)
 
 						// Добавляем баллун
 						let balloonLayout = ymaps.templateLayoutFactory.createClass(require('./cart-map-balloon.tpl'),

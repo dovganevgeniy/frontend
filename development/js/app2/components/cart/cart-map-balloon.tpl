@@ -1,4 +1,4 @@
-<div class="cart-balloon">
+﻿<div class="cart-balloon">
 	<button class="cart-balloon__close-btn" data-btn="close">X</button>
 
 	<div class="cart-balloon__address">$[properties.address]</div>
