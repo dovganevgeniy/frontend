@@ -793,7 +793,11 @@
 	 */
 	basket.requestAPI = function (method, data, options) {
 		var self = this;
-		var type = self.methods[method] || 'post';
+		var type = 'post';
+
+		if (self.methods[method]) {
+			type = self.methods[method];
+		}
 
 		data = data || {};
 		data['ZOLOTO585_USER_ID'] = $.cookie('ZOLOTO585_USER_ID');

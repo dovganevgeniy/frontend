@@ -138,7 +138,7 @@ const CartShops = {
 	computed: {
 		...mapGetters('Cart', ['selectedItem', 'city']),
 		...mapState('Cart', ['data', 'shops']),
-		...mapState('CartShops', ['shopid', 'placemarks', 'activeTab', 'distances']),
+		...mapState('CartShops', ['shopid', 'placemarks', 'activeTab','distances']),
 
 		itemShops(state) {
 			let itemid = +state.selectedItem.itemid
@@ -153,6 +153,20 @@ const CartShops = {
 			}
 
 			return state.itemShops.filter(shop => shop.xml_id == shopid)[0];
+		},
+
+		calculateGeo() {
+			// расчет расстояния от гео позиции до магазина
+
+			vm.itemShops.forEach((shop, index) => {
+				let coords = [ shop.shopLat, shop.shopLon ];
+				let myPos = [ lat , long ];
+				let shopPos = coords;
+
+				vm.distances[index] = ' — '+(Math.round(ymaps.coordSystem.geo.getDistance(myPos, shopPos) / 1000))+' км';
+        		console.log('index - '+index+' : '+vm.distances[index])	
+				
+			})
 		}
 	},
 
@@ -172,7 +186,7 @@ const CartShops = {
 
 	methods: {
 		...mapMutations('Cart', ['setShopid']),
-		...mapMutations('CartShops', ['setShopid', 'setTab']),
+		...mapMutations('CartShops', ['setShopid', 'setTab','setDistances']),
 
 		close(selected) {
 			this.$modal.hide('cart-shops')
@@ -205,7 +219,9 @@ const CartShops = {
 				const waitGeo = setInterval(function(){
 					if ( geo_succ == true ) {
 						clearInterval(waitGeo);			
-						vm.map.setCenter([ lat, long ], 14);
+						vm.map.setCenter([ lat, long ], 13);
+
+
 					//	console.log('wait SUCCESS')
 					}
 					//console.log('wait..')
@@ -305,21 +321,6 @@ const CartShops = {
 						vm.itemShops.forEach((shop, index) => {
 							let coords = [ shop.shopLat, shop.shopLon ];
 
-							// расчет расстояния от гео позиции до магазина
-
-							let myPos = [ lat , long ];
-							let shopPos = coords;
-
-							this.$store.commit('CartShops/setShopid');
-
-							if ( geo_succ ) {
-								vm.distances[index] = ' — '+(Math.round(ymaps.coordSystem.geo.getDistance(myPos, shopPos) / 1000))+' км';
-				        		//console.log('index - '+index+' : '+vm.distances[index])	
-				        		this.$store.commit('CartShops/setShopid', index);
-							}
-
-							// -------------------------------------------
-
 							vm.placemarks[index] = new ymaps.Placemark(coords,
 								{
 									shopid: shop.xml_id,
@@ -334,7 +335,8 @@ const CartShops = {
 									iconImageSize: [33, 44],
 									iconImageClipRect: [[99, 393], [132, 437]],
 									hideIconOnBalloonOpen: false,
-									balloonOffset: [0, -100]
+									balloonOffset: [0, -100],
+									balloonPanelMaxMapArea: 0,
 								}
 							)
 
@@ -397,6 +399,9 @@ const CartShops = {
 								}
 							});
 						}
+						
+
+						// -------------------------------------------
 					})
 	
 					clearInterval(checkApiLoaded)
