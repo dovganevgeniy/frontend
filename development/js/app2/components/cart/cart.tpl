@@ -295,9 +295,33 @@
 		<div class="confirmation-order" v-show="confirmForm && !createdOrders">
 			<div class="confirmation-order__title">
 				<span>подтверждение заказа</span>
-				Введение номера телефона необходимо для подтверждения заказа
+				Пожалуйста, введите Ваш email и номер телефона для подтверждения заказа
 			</div>
 			<form class="confirmation-order__form">
+				<div>
+					<input 
+						type="text" 
+						placeholder="Юлия" 
+						name="name" 
+						
+						class="error"
+						@keyup="updateInput" >
+				</div>
+
+				<div class="mobile-hide"></div>
+
+				<div>
+					<input 
+						type="text" 
+						placeholder="est2121@gmail.com" 
+						name="name" 
+						
+						class="error"
+						@keyup="updateInput" >
+				</div>
+
+				<div class="mobile-hide"></div>
+
 				<div>
 					<input 
 						type="tel" 
@@ -336,8 +360,14 @@
 						подтвердить заказ
 					</button>
 					<div class="confirmation-order__error" v-if="smsCodeError">Неверный код</div>
+					<div class="confirmation-order__error" v-if="nameError">Введите имя</div>
+					<div class="confirmation-order__error" v-if="emailError">Введите email</div>
 				</div>
 			</form>
+
+			<div class="confirmation-order__info">
+				Нажимая «Подтвердить заказ», <a href="https://zoloto585.ru/assets/docs/sogl_form.pdf" target="_blank">я даю полное согласие на обработку моих данных</a> и получение рекламной рассылки
+			</div>
 		</div>
 	</div>
 </div>

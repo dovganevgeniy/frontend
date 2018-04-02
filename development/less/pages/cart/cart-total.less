@@ -402,10 +402,12 @@
     width: 100%;
     margin: 0 auto;
     & > div{
-      width: 280px;
+      width: 46%;
       margin-bottom: 15px;
+      margin-right: 20px;
       @media @mobile{
         width: 100%;
+        margin-right: 0;
       }
       input{
         width: 100%;
@@ -413,6 +415,10 @@
         padding: 0 25px;
         border: 1px solid #d3d3d3;
         border-radius: 3px;
+
+        &.error {
+          border-color: @color-red;
+        }
       }
       .b-button{
         font-size: 12px;
@@ -426,9 +432,27 @@
       }
     }
   }
+ 
   &__error{
     margin: 5px 0 0;
+    line-height: 1;
     color: @color-red;
+  }
+
+  &__info {
+    text-align: center;
+    widows:     100%;
+    font-size:  12px;
+    line-height:  1;
+    color:      #878787;
+
+    a {
+      color:      #878787;
+      text-decoration: underline;
+      &:hover {
+        text-decoration: none;
+      }
+    }
   }
 }
 
