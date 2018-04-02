@@ -48,6 +48,7 @@
 						]"
 					>
 						<div class="modal-shops__shopAddress">{{ shop.address }}</div>
+						<div class="modal-shops__shopDistance">от меня <span>500 м</span></div>
 						<!--
 						<span class="red">В наличии</span>
 						<div class="modal-shops__day">
